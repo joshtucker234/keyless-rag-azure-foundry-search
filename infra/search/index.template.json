@@ -1,0 +1,24 @@
+{
+  "name": "__SEARCH_INDEX__",
+  "fields": [
+    {"name":"chunk_id","type":"Edm.String","key":true,"analyzer":"keyword","sortable":true},
+    {"name":"parent_id","type":"Edm.String","filterable":true},
+    {"name":"title","type":"Edm.String","searchable":true,"filterable":true,"retrievable":true},
+    {"name":"source","type":"Edm.String","filterable":true,"retrievable":true},
+    {"name":"page","type":"Edm.Int32","filterable":true,"sortable":true,"retrievable":true},
+    {"name":"chunk","type":"Edm.String","searchable":true,"retrievable":true},
+    {"name":"text_vector","type":"Collection(Edm.Single)","searchable":true,"retrievable":false,"dimensions":1536,"vectorSearchProfile":"vprofile"}
+  ],
+  "vectorSearch": {
+    "algorithms": [{"name":"hnsw","kind":"hnsw","hnswParameters":{"metric":"cosine","m":4,"efConstruction":400,"efSearch":500}}],
+    "profiles": [{"name":"vprofile","algorithm":"hnsw","vectorizer":"aoai-vectorizer"}],
+    "vectorizers": [{
+      "name":"aoai-vectorizer","kind":"azureOpenAI",
+      "azureOpenAIParameters":{"resourceUri":"__AOAI_ENDPOINT__","deploymentId":"embedding","modelName":"text-embedding-3-small"}
+    }]
+  },
+  "semantic": {
+    "defaultConfiguration":"sem-config",
+    "configurations":[{"name":"sem-config","prioritizedFields":{"titleField":{"fieldName":"title"},"prioritizedContentFields":[{"fieldName":"chunk"}]}}]
+  }
+}

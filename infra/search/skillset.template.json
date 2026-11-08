@@ -1,0 +1,26 @@
+{ "name":"__SKILLSET__",
+  "description":"Document Layout (page-aware chunks with page numbers) then embed with text-embedding-3-small",
+  "cognitiveServices":{"@odata.type":"#Microsoft.Azure.Search.AIServicesByIdentity","subdomainUrl":"__AOAI_ENDPOINT__/","identity":null},
+  "skills":[
+    {"@odata.type":"#Microsoft.Skills.Util.DocumentIntelligenceLayoutSkill","name":"layout","context":"/document",
+     "outputMode":"oneToMany","outputFormat":"text","extractionOptions":["locationMetadata"],
+     "chunkingProperties":{"unit":"characters","maximumLength":2000,"overlapLength":200},
+     "inputs":[{"name":"file_data","source":"/document/file_data"}],
+     "outputs":[{"name":"text_sections","targetName":"text_sections"}]},
+    {"@odata.type":"#Microsoft.Skills.Text.AzureOpenAIEmbeddingSkill","name":"embed","context":"/document/text_sections/*",
+     "resourceUri":"__AOAI_ENDPOINT__","deploymentId":"embedding","modelName":"text-embedding-3-small","dimensions":1536,
+     "inputs":[{"name":"text","source":"/document/text_sections/*/content"}],
+     "outputs":[{"name":"embedding","targetName":"text_vector"}]}
+  ],
+  "indexProjections":{
+    "selectors":[{"targetIndexName":"__SEARCH_INDEX__","parentKeyFieldName":"parent_id","sourceContext":"/document/text_sections/*",
+      "mappings":[
+        {"name":"chunk","source":"/document/text_sections/*/content"},
+        {"name":"text_vector","source":"/document/text_sections/*/text_vector"},
+        {"name":"page","source":"/document/text_sections/*/locationMetadata/pageNumber"},
+        {"name":"title","source":"/document/metadata_storage_name"},
+        {"name":"source","source":"/document/metadata_storage_path"}
+      ]}],
+    "parameters":{"projectionMode":"skipIndexingParentDocuments"}
+  }
+}

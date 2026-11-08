@@ -1,0 +1,35 @@
+# Copy to 00-env.sh, edit the values, then: source scripts/00-env.sh
+# 00-env.sh is git-ignored. Nothing here is a secret, but keep your subscription ID and email out of commits.
+
+export SUB="<your-subscription-id>"
+export OWNER_EMAIL="<you>@example.com"          # used for the Owner tag
+export SUF="$(printf '%04x' $RANDOM)"            # random suffix so global names are unique. Hard-code it once chosen, so new shells reuse it!
+
+export RG="rg-rag-${SUF}"
+export LOC="eastus2"                             # Foundry + models. Pick a region with gpt-4.1-mini and text-embedding-3-small GlobalStandard.
+export SEARCH_LOC="eastus"                       # Search Basic had no capacity in eastus2 for us; try your LOC first, fall back if it fails.
+export STORAGE_LOC="eastus"
+
+export FOUNDRY="ais-rag-${SUF}"                # Foundry (AIServices) resource, also the custom subdomain
+export PROJECT="proj-rag"
+export SEARCH="srch-rag-${SUF}"
+export STORAGE="strag${SUF}"                   # 3-24 lowercase letters/digits
+export LAW="log-rag-${SUF}"
+export APPI="appi-rag-${SUF}"
+
+# Tags. Some subscriptions have a policy that denies resources without non-empty Owner and Purpose tags, so we always set both.
+export TAGS="Owner=${OWNER_EMAIL} Purpose=rag-lab project=keyless-rag lab=Lab1-Foundry-RAG environment=sandbox delete-after=lab-complete"
+
+# Search object names and API version (AIServicesByIdentity billing needs 2026-04-01 or later).
+export API="2026-04-01"
+export SEARCH_INDEX="idx-rag-lab-v2"
+export DATASOURCE="ds-pdfs-split"
+export SKILLSET="ss-rag-layout"
+export INDEXER="ixr-pdfs-v2"
+
+# Derived endpoints used by the scripts and the app.
+export AOAI_ENDPOINT="https://${FOUNDRY}.cognitiveservices.azure.com"
+export PROJECT_ENDPOINT="https://${FOUNDRY}.services.ai.azure.com/api/projects/${PROJECT}"
+export SEARCH_ENDPOINT="https://${SEARCH}.search.windows.net"
+export STORAGE_RESOURCE_ID="/subscriptions/${SUB}/resourceGroups/${RG}/providers/Microsoft.Storage/storageAccounts/${STORAGE}"
+export MSYS_NO_PATHCONV=1                        # Git Bash on Windows: stop it rewriting /subscriptions/... paths

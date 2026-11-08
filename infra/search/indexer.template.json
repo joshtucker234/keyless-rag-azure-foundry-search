@@ -1,0 +1,3 @@
+{"name": "__INDEXER__", "dataSourceName": "__DATASOURCE__", "skillsetName": "__SKILLSET__", "targetIndexName": "__SEARCH_INDEX__",
+ "parameters": {"maxFailedItems": 10, "maxFailedItemsPerBatch": 10,
+   "configuration": {"dataToExtract": "contentAndMetadata", "parsingMode": "default", "allowSkillsetToReadFileData": true}}}

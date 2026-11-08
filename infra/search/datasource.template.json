@@ -1,0 +1,3 @@
+{"name": "__DATASOURCE__", "type": "azureblob",
+ "credentials": {"connectionString": "ResourceId=__STORAGE_RESOURCE_ID__;"},
+ "container": {"name": "pdfs-split"}}

@@ -1,0 +1,9 @@
+# Tested with Python 3.13 on Windows (Git Bash) in Nov 2026.
+azure-ai-projects>=2.10
+azure-identity>=1.25
+azure-search-documents>=12.0
+openai>=2.0
+azure-monitor-opentelemetry>=1.8
+streamlit>=1.50
+pypdf>=5.0
+httpx>=0.28
